@@ -71,14 +71,12 @@ public class Memo1BankApp {
 	}
 
 
-	// Creo una transaccion
 	@PostMapping("/transacciones")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Transaccion createTransaccion(@RequestBody Transaccion transaccion){
 		return transaccionService.createTransaccion(transaccion, accountService);
 	}
 
-	//Devuelvo todas las transacciones
 	@GetMapping("/transacciones")
 	public Collection<Transaccion> getTransacciones(){
 		return transaccionService.getTransacciones();
