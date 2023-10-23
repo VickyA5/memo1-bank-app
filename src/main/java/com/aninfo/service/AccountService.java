@@ -58,6 +58,7 @@ public class AccountService {
             throw new DepositNegativeSumException("Cannot deposit negative sums");
         }
 
+        //Supuesto: interpreto que el límite de 500 es para cada deposito individual.
         if(sum >= 2000){
             double extra = sum * 0.1;
             if( extra > 500){

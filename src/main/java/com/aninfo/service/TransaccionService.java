@@ -25,7 +25,7 @@ public class TransaccionService {
             accountService.withdraw(transaccion.getCbu(), transaccion.getMontoTransaccion());
         } else {
             throw new InvalidTransactionTypeException("Tipo de operacion no valida" +
-                    "Use las operaciones: 'Deposito' o 'Extraccion'.");
+                    "Las operaciones disponibles son: 'Deposito' o 'Extraccion'.");
         }
         return transaccionRepository.save(transaccion);
     }
