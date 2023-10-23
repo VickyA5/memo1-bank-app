@@ -1,7 +1,9 @@
 package com.aninfo;
 
 import com.aninfo.model.Account;
+import com.aninfo.model.Transaccion;
 import com.aninfo.service.AccountService;
+import com.aninfo.service.TransaccionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.List;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -26,6 +29,8 @@ public class Memo1BankApp {
 
 	@Autowired
 	private AccountService accountService;
+	@Autowired
+	private TransaccionService transaccionService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Memo1BankApp.class, args);
@@ -65,6 +70,37 @@ public class Memo1BankApp {
 		accountService.deleteById(cbu);
 	}
 
+
+	// Creo una transaccion
+	@PostMapping("/transacciones")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Transaccion createTransaccion(@RequestBody Transaccion transaccion){
+		return transaccionService.createTransaccion(transaccion, accountService);
+	}
+
+	//Devuelvo todas las transacciones
+	@GetMapping("/transacciones")
+	public Collection<Transaccion> getTransacciones(){
+		return transaccionService.getTransacciones();
+	}
+
+	@GetMapping("/transacciones/cbu/{cbu}")
+	public List<Transaccion> getTransaccionesByCBU(@PathVariable Long cbu){
+		return transaccionService.findByCbu(cbu);
+	}
+
+	@GetMapping("/transacciones/{idTransaccion}")
+	public ResponseEntity<Transaccion> getTransaccionesByID(@PathVariable Long idTransaccion){
+		Optional<Transaccion> transaccionOptional =  transaccionService.findByIdTransaccion(idTransaccion);
+		return ResponseEntity.of(transaccionOptional);
+	}
+
+	@DeleteMapping("/transacciones/{idTransaccion}")
+	public void deleteTransaccion(@PathVariable Long idTransaccion) {
+		transaccionService.deleteByIdTransaccion(idTransaccion);
+	}
+
+	/*
 	@PutMapping("/accounts/{cbu}/withdraw")
 	public Account withdraw(@PathVariable Long cbu, @RequestParam Double sum) {
 		return accountService.withdraw(cbu, sum);
@@ -73,7 +109,7 @@ public class Memo1BankApp {
 	@PutMapping("/accounts/{cbu}/deposit")
 	public Account deposit(@PathVariable Long cbu, @RequestParam Double sum) {
 		return accountService.deposit(cbu, sum);
-	}
+	} */
 
 	@Bean
 	public Docket apiDocket() {
